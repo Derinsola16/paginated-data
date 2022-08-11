@@ -1,28 +1,29 @@
 const startApp = async () => {
-  await getDetails();
+  await getDetails(
+    `https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84&page=${1}`
+  );
   const nextBtn = document.querySelector("[data-nextbtn]");
   const prevBtn = document.querySelector("[data-prevbtn]");
 
   nextBtn.addEventListener("click", async () => {
-    const pageView = document.querySelector("[data-pageview]");
-    const currentPage = pageView.getAttribute("currentPage");
-    await getDetails(parseInt(currentPage) + 1);
+    const link = nextBtn.getAttribute("link");
+    if (!link) return;
+    await getDetails(link);
   });
-  prevBtn.addEventListener("click", () => {
-    const pageView = document.querySelector("[data-pageview]");
-    const currentPage = pageView.getAttribute("currentPage");
-    if (parseInt(currentPage) == 1) return;
-    getDetails(parseInt(currentPage) - 1);
+  prevBtn.addEventListener("click", async () => {
+    const link = prevBtn.getAttribute("link");
+    if (!link) return;
+    await getDetails(link);
   });
 };
 
-const getDetails = async (currentPage = 1) => {
-  await fetch(
-    `https://randomapi.com/api/8csrgnjw?key=LEIX-GF3O-AG7I-6J84&page=${currentPage}`
-  )
+const getDetails = async (link) => {
+  await fetch(link)
     .then((response) => response.json())
     .then((data) => {
-      const current = data.results[0][currentPage];
+      const { paging, ...remainder } = data.results[0];
+      const current = remainder[Object.keys(remainder)[0]];
+      const currentPage = Object.keys(remainder)[0];
       const tableBodyElement = document.querySelector("[data-sink]");
       const pageView = document.querySelector("[data-pageview]");
       let tableBody = "";
@@ -37,12 +38,28 @@ const getDetails = async (currentPage = 1) => {
       tableBodyElement.innerHTML = tableBody;
       pageView.innerHTML = `Showing Page ${currentPage}`;
       pageView.setAttribute("currentPage", currentPage);
-      if (currentPage <= 1) {
+
+      if (paging.next) {
+        document.querySelector("[data-nextbtn]").removeAttribute("disabled");
+        document
+          .querySelector("[data-nextbtn]")
+          .setAttribute("link", paging.next);
+      } else {
+        document
+          .querySelector("[data-nextbtn]")
+          .setAttribute("disabled", "disabled");
+        document.querySelector("[data-nextbtn]").removeAttribute("link");
+      }
+      if (paging.previous) {
+        document.querySelector("[data-prevbtn]").removeAttribute("disabled");
+        document
+          .querySelector("[data-prevbtn]")
+          .setAttribute("link", paging.previous);
+      } else {
         document
           .querySelector("[data-prevbtn]")
           .setAttribute("disabled", "disabled");
-      } else {
-        document.querySelector("[data-prevbtn]").removeAttribute("disabled");
+        document.querySelector("[data-prevbtn]").removeAttribute("link");
       }
     });
 };
