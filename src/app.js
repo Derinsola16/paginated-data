@@ -28,7 +28,7 @@ const getDetails = async (currentPage = 1) => {
       let tableBody = "";
       for (i of current) {
         tableBody += `
-        <tr 'data-entryid'=${i.id}>
+        <tr 'data-entryid',${i.id}>
           <td>${i.row}</td>
           <td>${i.gender}</td>
           <td>${i.age}</td>
