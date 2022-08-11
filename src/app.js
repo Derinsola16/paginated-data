@@ -22,14 +22,13 @@ const getDetails = async (currentPage = 1) => {
   )
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       const current = data.results[0][currentPage];
       const tableBodyElement = document.querySelector("[data-sink]");
       const pageView = document.querySelector("[data-pageview]");
       let tableBody = "";
       for (i of current) {
         tableBody += `
-        <tr data-entryid=${i.id}>
+        <tr 'data-entryid'=${i.id}>
           <td>${i.row}</td>
           <td>${i.gender}</td>
           <td>${i.age}</td>
