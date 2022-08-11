@@ -1,11 +1,18 @@
 const startApp = async () => {
   await getDetails();
   const nextBtn = document.querySelector("[data-nextbtn]");
+  const prevBtn = document.querySelector("[data-prevbtn]");
 
   nextBtn.addEventListener("click", async () => {
     const pageView = document.querySelector("[data-pageview]");
     const currentPage = pageView.getAttribute("currentPage");
     await getDetails(parseInt(currentPage) + 1);
+  });
+  prevBtn.addEventListener("click", () => {
+    const pageView = document.querySelector("[data-pageview]");
+    const currentPage = pageView.getAttribute("currentPage");
+    if (parseInt(currentPage) == 1) return;
+    getDetails(parseInt(currentPage) - 1);
   });
 };
 
@@ -22,7 +29,7 @@ const getDetails = async (currentPage = 1) => {
       let tableBody = "";
       for (i of current) {
         tableBody += `
-        <tr>
+        <tr data-entryid=${i.id}>
           <td>${i.row}</td>
           <td>${i.gender}</td>
           <td>${i.age}</td>
@@ -31,6 +38,13 @@ const getDetails = async (currentPage = 1) => {
       tableBodyElement.innerHTML = tableBody;
       pageView.innerHTML = `Showing page ${currentPage}`;
       pageView.setAttribute("currentPage", currentPage);
+      if (currentPage <= 1) {
+        document
+          .querySelector("[data-prevbtn]")
+          .setAttribute("disabled", "disabled");
+      } else {
+        document.querySelector("[data-prevbtn]").removeAttribute("disabled");
+      }
     });
 };
 
