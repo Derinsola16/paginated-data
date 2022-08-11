@@ -36,7 +36,7 @@ const getDetails = async (currentPage = 1) => {
         </tr>`;
       }
       tableBodyElement.innerHTML = tableBody;
-      pageView.innerHTML = `Showing page ${currentPage}`;
+      pageView.innerHTML = `Showing Page ${currentPage}`;
       pageView.setAttribute("currentPage", currentPage);
       if (currentPage <= 1) {
         document
