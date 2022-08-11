@@ -1,11 +1,11 @@
 const startApp = async () => {
-  getDetails();
+  await getDetails();
   const nextBtn = document.querySelector("[data-nextbtn]");
 
-  nextBtn.addEventListener("click", () => {
+  nextBtn.addEventListener("click", async () => {
     const pageView = document.querySelector("[data-pageview]");
     const currentPage = pageView.getAttribute("currentPage");
-    getDetails(parseInt(currentPage) + 1);
+    await getDetails(parseInt(currentPage) + 1);
   });
 };
 
