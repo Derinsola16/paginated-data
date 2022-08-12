@@ -9,7 +9,7 @@ const startApp = async () => {
 
   // A callback function that is triggered when the next button is been clicked
   nextBtn.addEventListener("click", async () => {
-    const link = nextBtn.getAttribute("link");
+      const link = nextBtn.getAttribute("link");
     if (!link) return;
     await getDetails(link);
   });
@@ -77,5 +77,6 @@ const getDetails = async (link) => {
       }
     });
 };
-// Event fires when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.
+// Event fires when the initial HTML document has been completely loaded and parsed,
+// without waiting for stylesheets, images, and subframes to finish loading.
 document.addEventListener("DOMContentLoaded", startApp);
